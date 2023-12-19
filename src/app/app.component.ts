@@ -1,14 +1,28 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
+import { NavBarComponent } from './core/nav-bar/nav-bar.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  imports: [RouterOutlet, NavBarComponent],
+  template: `
+    <div>
+      <h2>Angular + Ngxtension Demo</h2>
+      <app-nav-bar />
+      <router-outlet />
+    </div>
+  `,
+  styles: `
+    div {
+      padding: 0.75rem;
+    }
+
+    h2 {
+      margin-bottom: 0.75rem;
+    }
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppComponent {
-  title = 'ng-online-store-demo-ngxtension';
-}
+export class AppComponent {}
