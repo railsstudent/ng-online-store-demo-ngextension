@@ -1,16 +1,16 @@
-import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { map, tap } from 'rxjs';
+import { connect } from 'ngxtension/connect';
 import { injectNavigationEnd } from 'ngxtension/navigation-end';
+import { map, tap } from 'rxjs';
 
 @Component({
   selector: 'app-nav-bar',
   standalone: true,
-  imports: [RouterLink, AsyncPipe],
+  imports: [RouterLink],
   template: `
     <div>
-      @if (isShowHomeButton$ | async) {
+      @if (isShowHomeButton()) {
         <a routerLink="/">Home</a>
       } @else {
         <span>&nbsp;</span>
@@ -33,16 +33,17 @@ import { injectNavigationEnd } from 'ngxtension/navigation-end';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavBarComponent {
-  cdr = inject(ChangeDetectorRef);
+  isShowHomeButton = signal(false);
 
-  // isShowHomeButton$ = isCurrentUrlIncludedFn('/', '/products')
-  //   .pipe(tap(() => this.cdr.markForCheck()));
-
-  excludedRoutes = ['/', '/products'];
-  isShowHomeButton$ = injectNavigationEnd()
-    .pipe(
-      map(({url, urlAfterRedirects}) => 
-        !this.excludedRoutes.includes(url) && !this.excludedRoutes.includes(urlAfterRedirects)),
-      tap(() => this.cdr.markForCheck())
-    );  
+  constructor() {
+    const cdr = inject(ChangeDetectorRef);
+    const excludedRoutes = ['/', '/products'];
+    const isShowHomeButton$ = injectNavigationEnd()
+      .pipe(
+        map(({url, urlAfterRedirects}) => 
+          !excludedRoutes.includes(url) && !excludedRoutes.includes(urlAfterRedirects)),
+        tap(() => cdr.markForCheck())
+      );
+    connect(this.isShowHomeButton, isShowHomeButton$);
+  }
 }
