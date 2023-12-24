@@ -1,4 +1,4 @@
-import { Product } from "./product.interface";
+import { Product } from '../../products/interfaces/product.interface';
 
 export interface CategoryProducts { 
   category: string; 

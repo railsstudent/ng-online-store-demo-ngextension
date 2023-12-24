@@ -1,6 +1,7 @@
 import { TitleCasePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, numberAttribute, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { connect } from 'ngxtension/connect';
 import { injectParams } from 'ngxtension/inject-params';
 import { CartService } from '../../carts/services/cart.service';
@@ -10,7 +11,7 @@ import { ProductService } from '../services/product.service';
 @Component({
   selector: 'app-product-details',
   standalone: true,
-  imports: [TitleCasePipe, FormsModule],
+  imports: [TitleCasePipe, FormsModule, RouterLink],
   template: `
     <div>
       @if (product(); as product) {
@@ -24,7 +25,13 @@ import { ProductService } from '../services/product.service';
           </div>
           <div class="row">
             <span>Category: </span>
-            <span>{{ product.category | titlecase }}</span>
+            <span>
+              <a [routerLink]="['/categories', product.category]">{{ product.category | titlecase }}</a>
+            </span>
+          </div>
+          <div class="row">
+            <span>Name: </span>
+            <span>{{ product.title | titlecase }}</span>
           </div>
           <div class="row">
             <span>Description: </span>

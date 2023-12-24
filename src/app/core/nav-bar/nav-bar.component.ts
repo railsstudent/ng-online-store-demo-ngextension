@@ -1,8 +1,7 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { connect } from 'ngxtension/connect';
-import { injectNavigationEnd } from 'ngxtension/navigation-end';
-import { map, tap } from 'rxjs';
+import { isShowLink } from './utilities/is-show-link.utility';
 
 @Component({
   selector: 'app-nav-bar',
@@ -15,7 +14,11 @@ import { map, tap } from 'rxjs';
       } @else {
         <span>&nbsp;</span>
       }
-      <a [routerLink]="['my-cart']">View Cart</a>
+      @if (isShowViewCartButton()) {
+        <a [routerLink]="['my-cart']">View Cart</a>
+      } @else {
+        <span>&nbsp;</span>
+      }
     </div>
   `,
   styles: [`
@@ -34,16 +37,10 @@ import { map, tap } from 'rxjs';
 })
 export class NavBarComponent {
   isShowHomeButton = signal(false);
+  isShowViewCartButton = signal(false);
 
   constructor() {
-    const cdr = inject(ChangeDetectorRef);
-    const excludedRoutes = ['/', '/products'];
-    const isShowHomeButton$ = injectNavigationEnd()
-      .pipe(
-        map(({url, urlAfterRedirects}) => 
-          !excludedRoutes.includes(url) && !excludedRoutes.includes(urlAfterRedirects)),
-        tap(() => cdr.markForCheck())
-      );
-    connect(this.isShowHomeButton, isShowHomeButton$);
+    connect(this.isShowHomeButton, isShowLink(['/', '/products']));
+    connect(this.isShowViewCartButton, isShowLink(['/my-cart']));
   }
 }
