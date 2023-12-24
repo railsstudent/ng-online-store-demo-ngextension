@@ -49,7 +49,7 @@
                 }
               ],
               "outputHashing": "all",
-              "baseHref": "https://railsstudent.github.io/ng-online-store-demo-ngxtension"
+              "baseHref": "https://railsstudent.github.io/ng-online-store-demo-ngxtension/"
             },
             "development": {
               "optimization": false,
