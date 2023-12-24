@@ -14,7 +14,7 @@ export class ProductService {
   private readonly httpClient = inject(HttpClient);
 
   products$ = this.httpClient.get<Product[]>(PRODUCTS_URL).pipe(shareReplay(1));
-  categories$ = this.httpClient.get<Product[]>(CATEGORIES_URL).pipe(shareReplay(1));
+  categories$ = this.httpClient.get<string[]>(CATEGORIES_URL).pipe(shareReplay(1));
 
   getProduct(id: number): Observable<Product | undefined> {
     return this.httpClient.get<Product>(`${PRODUCTS_URL}/${id}`)
