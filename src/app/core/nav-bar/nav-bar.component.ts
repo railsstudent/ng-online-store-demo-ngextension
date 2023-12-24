@@ -15,7 +15,11 @@ import { map, tap } from 'rxjs';
       } @else {
         <span>&nbsp;</span>
       }
-      <a [routerLink]="['my-cart']">View Cart</a>
+      @if (isShowViewCartButton()) {
+        <a [routerLink]="['my-cart']">View Cart</a>
+      } @else {
+        <span>&nbsp;</span>
+      }
     </div>
   `,
   styles: [`
@@ -34,16 +38,27 @@ import { map, tap } from 'rxjs';
 })
 export class NavBarComponent {
   isShowHomeButton = signal(false);
+  isShowViewCartButton = signal(false);
 
   constructor() {
     const cdr = inject(ChangeDetectorRef);
     const excludedRoutes = ['/', '/products'];
-    const isShowHomeButton$ = injectNavigationEnd()
+    const navigationEnd$ = injectNavigationEnd();
+
+    const isShowHomeButton$ = navigationEnd$
       .pipe(
         map(({url, urlAfterRedirects}) => 
           !excludedRoutes.includes(url) && !excludedRoutes.includes(urlAfterRedirects)),
         tap(() => cdr.markForCheck())
       );
     connect(this.isShowHomeButton, isShowHomeButton$);
+
+    const myCartUrl = '/my-cart';
+    const isShowViewCartButton$ = navigationEnd$
+      .pipe(
+        map(({url, urlAfterRedirects}) => myCartUrl !== url && myCartUrl !== urlAfterRedirects),
+        tap(() => cdr.markForCheck())
+      );
+    connect(this.isShowViewCartButton, isShowViewCartButton$);
   }
 }
