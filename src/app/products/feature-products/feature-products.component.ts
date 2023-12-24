@@ -1,10 +1,9 @@
-import { Component, Input, OnInit, inject, Injector, Signal } from '@angular/core';
-import { concatMap, from, pipe, toArray } from 'rxjs';
-import { computedFrom } from 'ngxtension/computed-from';
-import { filterUndefined } from 'ngxtension/map-skip-undefined';
+import { Component, inject, signal } from '@angular/core';
+import { connect } from 'ngxtension/connect';
+import { finalize } from 'rxjs';
+import { Product } from '../interfaces/product.interface';
 import { ProductComponent } from '../product/product.component';
 import { ProductService } from '../services/product.service';
-import { Product } from '../interfaces/product.interface';
 
 @Component({
   selector: 'app-feature-products',
@@ -14,8 +13,12 @@ import { Product } from '../interfaces/product.interface';
     @if (products(); as products) {
       <h2>Featured Products</h2>
       <div class="featured">
-        @for (product of products; track product.id) {
-          <app-product [product]="product" class="item" />
+        @if (isLoading) {
+          <p>Loading featured products...</p>
+        } @else {
+          @for (product of products; track product.id) {
+            <app-product [product]="product" class="item" />
+          }
         }
       </div>
       <hr>
@@ -38,25 +41,16 @@ import { Product } from '../interfaces/product.interface';
     }
   `,
 })
-export class FeatureProductsComponent implements OnInit {
+export class FeatureProductsComponent {
+  products = signal<Product[]>([]);
+  isLoading = false;
 
-  @Input({ required: true })
-  ids!: number[];
+  constructor() {
+    const productService = inject(ProductService);
+    this.isLoading = true;
+    const featuredProducts$ = productService.getFeaturedProducts()
+      .pipe(finalize(() => this.isLoading = false));
 
-  private readonly productService = inject(ProductService);
-  injector = inject(Injector);
-  products!: Signal<Product[]>;
-
-  ngOnInit(): void {
-    const queries = this.ids.map((id) => this.productService.getProduct(id));
-    this.products = computedFrom(queries, 
-      pipe(
-        concatMap((products) => from(products)),
-        filterUndefined(),
-        toArray()
-      ),
-      { initialValue: [] as Product[], injector: this.injector }
-    )
+    connect(this.products, featuredProducts$);
   }
-
 }
