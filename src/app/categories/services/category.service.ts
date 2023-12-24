@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { shareReplay } from 'rxjs';
+import { Observable, shareReplay } from 'rxjs';
 import { Product } from '../../products/interfaces/product.interface';
 
 const CATEGORIES_URL = 'https://fakestoreapi.com/products/categories';
@@ -14,7 +14,7 @@ export class CategoryService {
 
   categories$ = this.httpClient.get<string[]>(CATEGORIES_URL).pipe(shareReplay(1));
 
-  getCategory(category: string) {
-    this.httpClient.get<Product[]>(`${CATEGORY_URL}/${category}`).pipe(shareReplay(1));
+  getCategory(category: string): Observable<Product[]> {
+    return this.httpClient.get<Product[]>(`${CATEGORY_URL}/${category}`).pipe(shareReplay(1));
   }
 }
