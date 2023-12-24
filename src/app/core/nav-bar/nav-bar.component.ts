@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { connect } from 'ngxtension/connect';
-import { isShowLink } from './is-show-link.utility';
+import { isShowLink } from './utilities/is-show-link.utility';
 
 @Component({
   selector: 'app-nav-bar',

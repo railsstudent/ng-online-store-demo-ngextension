@@ -1,3 +1,4 @@
+import { TitleCasePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { Params } from '@angular/router';
 import { connect } from 'ngxtension/connect';
@@ -5,7 +6,6 @@ import { injectParams } from 'ngxtension/inject-params';
 import { Product } from '../../products/interfaces/product.interface';
 import { CategoryService } from '../services/category.service';
 import { ProductComponent } from './../../products/product/product.component';
-import { TitleCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-category-products',
@@ -44,7 +44,7 @@ export class CategoryProductsComponent {
 
   constructor() {
     const categoryService = inject(CategoryService);
-    
+
     if (this.category()) {
       connect(this.products, categoryService.getCategory(this.category()));
     }
