@@ -14,14 +14,18 @@ export class ShopPageTitleStrategy extends TitleStrategy {
     this.subscription?.unsubscribe();
 
     const customTitle = this.buildTitle(snapshot) || '';
-    const productId = snapshot.root.firstChild?.params['id'] || '';
+    const firstChild = snapshot.root.firstChild;
+    const productId = firstChild?.params['id'] || '';
+    const category = firstChild?.params['category'] || '';
     if (productId) {
       this.subscription = this.productService.getProduct(productId)
         .pipe(
           map((product) => product?.title || ''),
-          map((productTitle) => `Product - ${productTitle}`),
+          map((productTitle) => `${customTitle} - ${productTitle}`),
         )
         .subscribe((pageTitle) => this.title.setTitle(pageTitle));
+    } else if (category) {
+      this.title.setTitle(`${customTitle} - ${category}`)
     } else {
       this.title.setTitle(customTitle);
     }

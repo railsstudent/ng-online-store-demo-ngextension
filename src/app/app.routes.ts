@@ -11,10 +11,15 @@ export const routes: Routes = [
     loadComponent: () => import('./products/product-details/product-details.component').then((m) => m.ProductDetailsComponent),
     title: 'Product',
   },
-    {
+  {
     path: 'my-cart',
     loadComponent: () => import('./carts/cart/cart.component').then((m) => m.CartComponent),
     title: 'My shopping cart',
+  },
+  {
+    path: 'categories/:category',
+    loadComponent: () => import('./categories/category-products/category-products.component').then((m) => m.CategoryProductsComponent),
+    title: 'Category',
   },
   {
     path: '',

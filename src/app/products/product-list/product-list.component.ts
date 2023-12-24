@@ -5,6 +5,7 @@ import { finalize, map, pipe, startWith } from 'rxjs';
 import { CategoryProducts } from '../interfaces/category-products.interface';
 import { Product } from '../interfaces/product.interface';
 import { ProductComponent } from '../product/product.component';
+import { CategoryService } from '../services/category.service';
 import { ProductService } from '../services/product.service';
 
 @Component({
@@ -49,9 +50,11 @@ export class ProductListComponent {
   
   constructor() {
     const productService = inject(ProductService);
+    const categoryService = inject(CategoryService);
     const cdr = inject(ChangeDetectorRef);
+
     const queries = [
-      productService.categories$,
+      categoryService.categories$,
       productService.products$,
     ];
 

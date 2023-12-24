@@ -27,6 +27,10 @@ import { ProductService } from '../services/product.service';
             <span>{{ product.category | titlecase }}</span>
           </div>
           <div class="row">
+            <span>Name: </span>
+            <span>{{ product.title | titlecase }}</span>
+          </div>
+          <div class="row">
             <span>Description: </span>
             <span>{{ product.description }}</span>
           </div>
