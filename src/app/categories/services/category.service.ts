@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { shareReplay } from 'rxjs';
-import { Product } from '../interfaces/product.interface';
+import { Product } from '../../products/interfaces/product.interface';
 
 const CATEGORIES_URL = 'https://fakestoreapi.com/products/categories';
 const CATEGORY_URL = 'https://fakestoreapi.com/products/category';

@@ -2,11 +2,11 @@ import { TitleCasePipe } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Signal, inject } from '@angular/core';
 import { computedFrom } from 'ngxtension/computed-from';
 import { finalize, map, pipe, startWith } from 'rxjs';
-import { CategoryProducts } from '../interfaces/category-products.interface';
-import { Product } from '../interfaces/product.interface';
-import { ProductComponent } from '../product/product.component';
+import { Product } from '../../products/interfaces/product.interface';
+import { ProductComponent } from '../../products/product/product.component';
+import { ProductService } from '../../products/services/product.service';
+import { CategoryProducts } from '../interface/category-products.interface';
 import { CategoryService } from '../services/category.service';
-import { ProductService } from '../services/product.service';
 
 @Component({
   selector: 'app-product-list',

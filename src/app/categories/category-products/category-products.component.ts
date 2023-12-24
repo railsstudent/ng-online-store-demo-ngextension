@@ -1,9 +1,11 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { CategoryService } from '../services/category.service';
+import { ProductComponent } from './../../products/product/product.component';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
 @Component({
   selector: 'app-category-products',
   standalone: true,
-  imports: [],
+  imports: [ProductComponent],
   template: `
     <p>
       category-products works!
@@ -13,5 +15,5 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CategoryProductsComponent {
-
+  categoryService = inject(CategoryService);
 }
