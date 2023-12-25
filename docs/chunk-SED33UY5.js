@@ -1,0 +1,1 @@
+import{f as u,m as n}from"./chunk-V75PI7OT.js";import{W as m,ia as c,r as o}from"./chunk-YBSSHO5Y.js";function r(t){c(r);let i=m(u),a=i.snapshot.params||{};if(typeof t=="function")return n(i.params.pipe(o(t)),{initialValue:t(a)});let p=e=>t?e?.[t]??null:e;return n(i.params.pipe(o(p)),{initialValue:p(a)})}export{r as a};
