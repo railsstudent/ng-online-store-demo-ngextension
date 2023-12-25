@@ -13,7 +13,7 @@ import { ProductService } from '../services/product.service';
     @if (products(); as products) {
       <h2>Featured Products</h2>
       <div class="featured">
-        @if (isLoading) {
+        @if (isLoading()) {
           <p>Loading featured products...</p>
         } @else {
           @for (product of products; track product.id) {
@@ -43,13 +43,13 @@ import { ProductService } from '../services/product.service';
 })
 export class FeatureProductsComponent {
   products = signal<Product[]>([]);
-  isLoading = false;
+  isLoading = signal(false);
 
   constructor() {
     const productService = inject(ProductService);
-    this.isLoading = true;
+    this.isLoading.set(true);
     const featuredProducts$ = productService.getFeaturedProducts()
-      .pipe(finalize(() => this.isLoading = false));
+      .pipe(finalize(() => this.isLoading.set(false)));
 
     connect(this.products, featuredProducts$);
   }
