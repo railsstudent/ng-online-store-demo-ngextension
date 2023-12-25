@@ -1,5 +1,5 @@
 import { TitleCasePipe } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Signal, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Signal, inject, signal } from '@angular/core';
 import { computedFrom } from 'ngxtension/computed-from';
 import { finalize, map, pipe, startWith } from 'rxjs';
 import { Product } from '../../products/interfaces/product.interface';
@@ -15,7 +15,7 @@ import { CategoryService } from '../services/category.service';
   template: `
     <h2>Catalogue</h2>
     <div>
-      @if (isLoading) {
+      @if (isLoading()) {
         <p>Loading products...</p>
       } @else {
         @for (catProducts of categoryProducts(); track catProducts.category) {
@@ -46,19 +46,18 @@ import { CategoryService } from '../services/category.service';
 })
 export class ProductListComponent {
   categoryProducts!: Signal<CategoryProducts[]>;
-  isLoading = false;
+  isLoading = signal(false);
   
   constructor() {
     const productService = inject(ProductService);
     const categoryService = inject(CategoryService);
-    const cdr = inject(ChangeDetectorRef);
 
     const queries = [
       categoryService.categories$,
       productService.products$,
     ];
 
-    this.isLoading = true;
+    this.isLoading.set(true);
     this.categoryProducts = computedFrom(queries, 
       pipe(
         map((results) => {
@@ -73,10 +72,7 @@ export class ProductListComponent {
             });
           }, [] as CategoryProducts[]);
         }),
-        finalize(() => { 
-          this.isLoading = false;
-          cdr.markForCheck();
-        }),
+        finalize(() => this.isLoading.set(false)),
         startWith([] as CategoryProducts[])
       ),
     );
