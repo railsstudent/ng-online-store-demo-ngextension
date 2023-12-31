@@ -2,6 +2,17 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.0.7.
 
+## Live demo
+
+Github Page: https://railsstudent.github.io/ng-online-store-demo-ngxtension/
+
+## Deployment
+
+- switch to gh-pages
+- merge latest changes from main
+- run ./deploy-github-page.sh
+- git commit and push changes 
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
